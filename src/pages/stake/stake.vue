@@ -1,4 +1,5 @@
 <script setup>
+import Header from "./Header.vue";
 // chain
 import net_config from "@/utils/chain/testnet/sepolia_config";
 import msn_abi from "@/utils/chain/abi/msn.abi.json";
@@ -46,37 +47,33 @@ async function getWalletAccount() {
   }
 }
 
-let msnBalanceInWallet = ref("")
-async function getMsnBalanceInWallet(){
+let msnBalanceInWallet = ref("");
+async function getMsnBalanceInWallet() {
   if (walletAccount.value === "") {
     return;
   }
 
-  var msn_balanceOf_result = await contract_call.msn_balanceOf(
-        net_config.chain_id,
-        net_config.msn_contract_address,
-        msn_abi,
-        walletAccount.value)
+  var msn_balanceOf_result = await contract_call.msn_balanceOf(net_config.chain_id, net_config.msn_contract_address, msn_abi, walletAccount.value);
 
-    if (msn_balanceOf_result.err === false) {
-        console.log("msn_balanceOf_result:", msn_balanceOf_result.result)
-        msnBalanceInWallet.value=msn_balanceOf_result.result.toString()
+  if (msn_balanceOf_result.err === false) {
+    console.log("msn_balanceOf_result:", msn_balanceOf_result.result);
+    msnBalanceInWallet.value = msn_balanceOf_result.result.toString();
+  } else {
+    if (msn_balanceOf_result.err.message == "chain_id error") {
+      console.log("please switch to correct chain:" + net_config.chain_name);
     } else {
-        if (msn_balanceOf_result.err.message == "chain_id error") {
-            console.log("please switch to correct chain:" + net_config.chain_name)
-        } else {
-            console.log('msn_balanceOf err handler:', msn_balanceOf_result.err.message)
-        }
+      console.log("msn_balanceOf err handler:", msn_balanceOf_result.err.message);
     }
+  }
 }
 
-let toStakeAmount = ref(0);
+let toStakeAmount = ref(null);
 async function toStake() {
   if (walletAccount.value === "") {
     return;
   }
 
-  await getMsnBalanceInWallet()
+  await getMsnBalanceInWallet();
   stakeWinVisible.value = true;
 }
 
@@ -107,19 +104,17 @@ async function doStake() {
     if (allow_amount_bn.isLessThan(stake_amount_bn)) {
       // some tip
       let tip = await swal.fire({
-      title: "",
-      html: `Allowance is not enough. Please allow the third party to spend MSN from your current balance.<br/>It is recommended that set a large value to avoid repeated requests`,
-      showDenyButton: false,
-      showCancelButton: true,
-      showConfirmButton: true,
-      confirmButtonText: "OK",
-      denyButtonText: "",
-    });
-    if (!tip.isConfirmed) {
-      return
-    }
-
-
+        title: "",
+        html: `Allowance is not enough. Please allow the third party to spend MSN from your current balance.<br/>It is recommended that set a large value to avoid repeated requests`,
+        showDenyButton: false,
+        showCancelButton: true,
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        denyButtonText: "",
+      });
+      if (!tip.isConfirmed) {
+        return;
+      }
 
       console.log("need approve");
       // do approve
@@ -127,14 +122,20 @@ async function doStake() {
         return;
       }
       showWalletProcess();
-      let result = await contract_call.msn_approve(net_config.chain_id, net_config.msn_contract_address, msn_abi, net_config.stake_contract_address, msnBalanceInWallet.value);
+      let result = await contract_call.msn_approve(
+        net_config.chain_id,
+        net_config.msn_contract_address,
+        msn_abi,
+        net_config.stake_contract_address,
+        msnBalanceInWallet.value
+      );
       hideWalletProcess();
       console.log(result);
       if (result.result === true) {
         toast.success("approved");
       } else {
         toast.error("approve err:" + result.err?.message);
-        return
+        return;
       }
     }
   } else {
@@ -156,7 +157,7 @@ async function doStake() {
     console.log("stake_stake_result:", stake_stake_result.result);
     refreshStakeData();
     stakeWinVisible.value = false;
-    toStakeAmount.value =0
+    toStakeAmount.value = null;
   } else {
     if (stake_stake_result.err.message == "chain_id error") {
       // console.log("please switch to correct chain:" + net_config.chain_name)
@@ -168,19 +169,18 @@ async function doStake() {
   }
 }
 
-let unstakeAmount = ref(0);
-async function toUnstake(){
+let unstakeAmount = ref(null);
+async function toUnstake() {
   if (walletAccount.value === "") {
     return;
   }
 
-  unstakeWinVisible.value = true
+  unstakeWinVisible.value = true;
 }
 async function doUnstake() {
   if (walletAccount.value === "") {
     return;
   }
-
 
   let unstake_amount_bn = new BigNumber(unstakeAmount.value);
   unstake_amount_bn = unstake_amount_bn.times(1e18);
@@ -199,8 +199,8 @@ async function doUnstake() {
 
     // do something
     refreshStakeData();
-    unstakeWinVisible.value = false
-    unstakeAmount.value = 0
+    unstakeWinVisible.value = false;
+    unstakeAmount.value = null;
   } else {
     if (stake_unstake_result.err.message == "chain_id error") {
       console.log("please switch to correct chain:" + net_config.chain_name);
@@ -261,7 +261,7 @@ const getStakeToken = async () => {
   }
 };
 
-let lastStakeTime = parseInt(Date.now()/1000)
+let lastStakeTime = parseInt(Date.now() / 1000);
 const getStakeLastTime = async () => {
   if (walletAccount.value === "") {
     return;
@@ -276,7 +276,7 @@ const getStakeLastTime = async () => {
 
   if (stake_get_stake_last_time_result.err === false) {
     console.log("stake_get_stake_last_time_result:", stake_get_stake_last_time_result.result.toString());
-    lastStakeTime=parseInt(stake_get_stake_last_time_result.result.toString())
+    lastStakeTime = parseInt(stake_get_stake_last_time_result.result.toString());
   } else {
     if (stake_get_stake_last_time_result.err.message == "chain_id error") {
       console.log("please switch to correct chain:" + net_config.chain_name);
@@ -319,23 +319,19 @@ const getTotalCredit = async () => {
   }
 };
 
-let unharvestCredit=ref("0")
-async function refreshUnharvestCredit(){
-  if (creditRewardSpeed.value===""||creditRewardSpeed.value==="0")
-  {
-    unharvestCredit.value="0"
-    return 
+let unharvestCredit = ref("0");
+async function refreshUnharvestCredit() {
+  if (creditRewardSpeed.value === "" || creditRewardSpeed.value === "0") {
+    unharvestCredit.value = "0";
+    return;
   }
-  let nowTime = parseInt(Date.now()/1000)
-  let gapSecs = nowTime-lastStakeTime
+  let nowTime = parseInt(Date.now() / 1000);
+  let gapSecs = nowTime - lastStakeTime;
 
   let unharvestCredit_amount_bn = new BigNumber(creditRewardSpeed.value);
   unharvestCredit_amount_bn = unharvestCredit_amount_bn.times(gapSecs);
   unharvestCredit.value = unharvestCredit_amount_bn.toFixed(0);
-  
 }
-
-
 
 const harvest = async () => {
   // show loading page
@@ -353,7 +349,7 @@ const harvest = async () => {
       console.log("please switch to correct chain:" + net_config.chain_name);
     } else {
       // console.log("stake_harvest err handler:", stake_harvest_result.err.message);
-      toast.error("harvest err:", stake_harvest_result.err.message);
+      toast.error("harvest err ", stake_harvest_result.err.message);
     }
   }
 };
@@ -368,7 +364,7 @@ function refreshStakeData() {
   // get reward speed
   getCreditRewardSpeed();
 
-  getStakeLastTime()
+  getStakeLastTime();
 }
 
 //////// page init ////////
@@ -391,40 +387,140 @@ onMounted(async () => {
     refreshStakeData();
 
     setInterval(() => {
-      refreshUnharvestCredit()
+      refreshUnharvestCredit();
     }, 1000);
   }
 });
-onBeforeUnmount(() => {
-
-});
+onBeforeUnmount(() => {});
 </script>
 
 <template>
-  <div>
-    <div>reward speed:{{ tokenAmountParser.parserToMoneyFormat(creditRewardSpeed, 18, 8, 8) }}</div>
-    <div>unharvest credit:{{ tokenAmountParser.parserToMoneyFormat(unharvestCredit, 18, 8, 8) }}</div>
-    <button @click="getCreditRewardSpeed()" class="btn-primary">get_credit_reward_speed</button>
+  <div class="flex flex-col min-h-screen overflow-hidden">
+    <!-- Site header -->
+    <Header />
 
-    <div class="mt-3 mb-3">---------------------</div>
+    <!-- Page content -->
+    <main class="grow">
+      <section class="relative">
+        <!-- Illustration -->
+        <div class="hidden lg:block absolute bottom-0 left-1/2 -translate-x-1/2 pointer-events-none -z-10" aria-hidden="true">
+          <img src="../../images/pricing-illustration.svg" class="max-w-none" width="618" height="468" alt="Pricing Illustration" />
+        </div>
 
-    <div>stake token:{{ tokenAmountParser.parserToMoneyFormat(stakeTokenAmount, 18, 8, 8) }}</div>
-    <button @click="getStakeToken()" class="btn-primary">stake_get_stake_token</button>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+          <div class="py-12 md:py-20 border-t border-gray-800">
+            <!-- Section header -->
+            <div class="max-w-3xl mx-auto text-center pb-12 md:pb-20">
+              <h2 class="h2 font-uncut-sans mb-4">XLander.IO next layer 1</h2>
+              <div class="max-w-2xl mx-auto">
+                <p class="text-xl text-gray-400">Staking Meson.Network's mainnet token will grant credits, which will be mapped into 100% of the XLander's seed round.</p>
+              </div>
+            </div>
 
-    <div class="mt-3 mb-3">---------------------</div>
+            <!-- Pricing tables -->
+            <div class="max-w-sm mx-auto grid gap-8 lg:grid-cols-3 lg:gap-6 items-start lg:max-w-none pt-4">
+              <!-- Pricing table 2 -->
+              <div class="relative flex flex-col h-full p-6 bg-gray-800" data-aos="zoom-out" data-aos-delay="100">
+                <div class="absolute top-0 right-0 mr-6 -mt-4">
+                  <div class="inline-flex items-center text-sm font-semibold py-1 px-3 text-emerald-600 bg-emerald-200 rounded-full">
+                    <svg class="fill-emerald-500 mr-2" width="12" height="14" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M5.315.068a.5.5 0 0 0-.745.347A7.31 7.31 0 0 1 3.182 3.6a7.924 7.924 0 0 1-.8.83A6.081 6.081 0 0 0 0 9.035a5.642 5.642 0 0 0 2.865 4.9.5.5 0 0 0 .746-.4 2.267 2.267 0 0 1 .912-1.67 4.067 4.067 0 0 0 1.316-1.4 4.662 4.662 0 0 1 1.819 3.1.5.5 0 0 0 .742.371c1.767-.999 2.86-2.87 2.865-4.9-.001-3.589-2.058-6.688-5.95-8.968Z"
+                      />
+                    </svg>
+                    <span>HOT!</span>
+                  </div>
+                </div>
+                <div class="mb-6">
+                  <div class="text-lg font-semibold mb-1">Stake</div>
+                  <div class="text-gray-400 mb-6"></div>
+                  <a class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group" @click="toStake()">
+                    Stake
+                    <span class="tracking-normal text-blue-200 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1"></span>
+                  </a>
+                </div>
+              </div>
 
-    <div>reward credit:{{ tokenAmountParser.parserToMoneyFormat(credit, 18, 8, 8) }}</div>
-    <button @click="getCredit()" class="btn-primary">stake_get_credit</button>
+              <div class="relative flex flex-col h-full p-6 bg-gray-800" data-aos="zoom-out" data-aos-delay="100">
+                <div class="absolute top-0 right-0 mr-6 -mt-4"></div>
+                <div class="mb-6">
+                  <div class="text-lg font-semibold mb-1">Unstake</div>
+                  <div class="text-gray-400 mb-6"></div>
+                  <a class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group" @click="toUnstake()">
+                    Unstake
+                    <span class="tracking-normal text-blue-200 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1"></span>
+                  </a>
+                </div>
+              </div>
 
-    <div class="mt-3 mb-3">---------------------</div>
+              <div class="relative flex flex-col h-full p-6 bg-gray-800" data-aos="zoom-out" data-aos-delay="100">
+                <div class="absolute top-0 right-0 mr-6 -mt-4"></div>
+                <div class="mb-6">
+                  <div class="text-lg font-semibold mb-1">Harvest</div>
+                  <div class="text-gray-400 mb-6"></div>
+                  <a class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group" @click="harvest()">
+                    Harvest
+                    <span class="tracking-normal text-blue-200 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1"></span>
+                  </a>
+                </div>
+              </div>
 
-    <button @click="toStake()" class="btn-primary">stake_stake</button>
-    <button @click="toUnstake()" class="btn-primary">stake_unstake</button>
-    <button @click="harvest()" class="btn-primary">stake_harvest</button>
+              <div class="relative flex flex-col h-full p-6" data-aos="zoom-out">
+                <div class="mb-6">
+                  <div class="text-lg font-semibold mb-1">Reward Speed</div>
+                  <div class="font-uncut-sans inline-flex items-baseline mb-2">
+                    <span class="text-3xl font-medium text-gray-400"></span>
+                    <span class="text-4xl font-bold leading-7">{{ tokenAmountParser.parserToMoneyFormat(creditRewardSpeed, 18, 8, 8) }}</span>
+                    <!-- <span class="font-medium text-gray-400">.00</span> -->
+                  </div>
+                  <div class="text-lg font-semibold mb-1">Unharvest Credit</div>
+                  <div class="font-uncut-sans inline-flex items-baseline mb-2">
+                    <span class="text-3xl font-medium text-gray-400"></span>
+                    <span class="text-4xl font-bold leading-7">{{ tokenAmountParser.parserToMoneyFormat(unharvestCredit, 18, 5, 5) }}</span>
+                    <!-- <span class="font-medium text-gray-400">.00</span> -->
+                  </div>
+                  <a class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group" @click="getCreditRewardSpeed()">
+                    Get Credit Reward Speed
+                    <span class="tracking-normal text-blue-200 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1"></span>
+                  </a>
+                </div>
+              </div>
 
-    <div class="mt-3 mb-3">---------other------------</div>
-    <button @click="getStakeLastTime()" class="btn-primary">stake_get_stake_last_time</button>
-    <button @click="getTotalCredit()" class="btn-primary">stake_get_total_credit</button>
+              <!-- Pricing table 1 -->
+              <div class="relative flex flex-col h-full p-6" data-aos="zoom-out">
+                <div class="mb-6">
+                  <div class="text-lg font-semibold mb-4">Stake Token</div>
+                  <div class="font-uncut-sans inline-flex items-baseline mb-4">
+                    <span class="text-3xl font-medium text-gray-400"></span>
+                    <span class="text-4xl font-bold leading-7">{{ tokenAmountParser.parserToMoneyFormat(stakeTokenAmount, 18, 8, 8) }}</span>
+                    <!-- <span class="font-medium text-gray-400">.00</span> -->
+                  </div>
+                  <a class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group" @click="getStakeToken()">
+                    Get Stake Token
+                    <span class="tracking-normal text-blue-200 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1"></span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="relative flex flex-col h-full p-6" data-aos="zoom-out">
+                <div class="mb-6">
+                  <div class="text-lg font-semibold mb-4">Reward Credit</div>
+                  <div class="font-uncut-sans inline-flex items-baseline mb-4">
+                    <span class="text-3xl font-medium text-gray-400"></span>
+                    <span class="text-4xl font-bold leading-7">{{ tokenAmountParser.parserToMoneyFormat(credit, 18, 8, 8) }}</span>
+                    <!-- <span class="font-medium text-gray-400">.00</span> -->
+                  </div>
+                  <a class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group" @click="getCredit()">
+                    Get Credit
+                    <span class="tracking-normal text-blue-200 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1"></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <Modal v-model:open="stakeWinVisible" margin-close="true">
       <template v-slot:header>Stake Token</template>
@@ -432,9 +528,9 @@ onBeforeUnmount(() => {
       <template v-slot:body>
         <div class="my-2">
           <p>Msn balance in wallet</p>
-          <input type="text" :value="tokenAmountParser.parserToMoneyFormat(msnBalanceInWallet, 18, 8, 8)"  disabled class="mt-1 disabled rounded" />
+          <input type="text" :value="tokenAmountParser.parserToMoneyFormat(msnBalanceInWallet, 18, 8, 8)" disabled class="mt-1 disabled rounded" />
           <p class="mt-3">Amount to stake</p>
-          <input type="number" v-model="toStakeAmount"  placeholder="Amount to stake" class="rounded mt-1" />
+          <input type="number" v-model="toStakeAmount" placeholder="Amount to stake" class="rounded mt-1" />
         </div>
       </template>
 
@@ -471,5 +567,31 @@ onBeforeUnmount(() => {
 
       <template v-slot:body> Processing wallet... </template>
     </Modal>
+
+
+
+    <!-- <div>reward speed:{{ tokenAmountParser.parserToMoneyFormat(creditRewardSpeed, 18, 8, 8) }}</div>
+    <div>unharvest credit:{{ tokenAmountParser.parserToMoneyFormat(unharvestCredit, 18, 8, 8) }}</div>
+    <button @click="getCreditRewardSpeed()" class="btn-primary">get_credit_reward_speed</button>
+
+    <div class="mt-3 mb-3">---------------------</div>
+
+    <div>stake token:{{ tokenAmountParser.parserToMoneyFormat(stakeTokenAmount, 18, 8, 8) }}</div>
+    <button @click="getStakeToken()" class="btn-primary">stake_get_stake_token</button>
+
+    <div class="mt-3 mb-3">---------------------</div>
+
+    <div>reward credit:{{ tokenAmountParser.parserToMoneyFormat(credit, 18, 8, 8) }}</div>
+    <button @click="getCredit()" class="btn-primary">stake_get_credit</button>
+
+    <div class="mt-3 mb-3">---------------------</div>
+
+    <button @click="toStake()" class="btn-primary">stake_stake</button>
+    <button @click="toUnstake()" class="btn-primary">stake_unstake</button>
+    <button @click="harvest()" class="btn-primary">stake_harvest</button>
+
+    <div class="mt-3 mb-3">---------other------------</div>
+    <button @click="getStakeLastTime()" class="btn-primary">stake_get_stake_last_time</button>
+    <button @click="getTotalCredit()" class="btn-primary">stake_get_total_credit</button> -->
   </div>
 </template>

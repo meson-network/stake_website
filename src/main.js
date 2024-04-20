@@ -17,6 +17,7 @@ import VueSweetalert2 from 'vue-sweetalert2';
 
 //
 import "./assets/main.scss";
+import './css/style.css'
 
 ///////////////////////////
 const app = createApp(App);
