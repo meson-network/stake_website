@@ -56,13 +56,13 @@ async function getMsnBalanceInWallet() {
   var msn_balanceOf_result = await contract_call.msn_balanceOf(net_config.chain_id, net_config.msn_contract_address, msn_abi, walletAccount.value);
 
   if (msn_balanceOf_result.err === false) {
-    console.log("msn_balanceOf_result:", msn_balanceOf_result.result);
+    // console.log("msn_balanceOf_result:", msn_balanceOf_result.result);
     msnBalanceInWallet.value = msn_balanceOf_result.result.toString();
   } else {
     if (msn_balanceOf_result.err.message == "chain_id error") {
-      console.log("please switch to correct chain:" + net_config.chain_name);
+      toast.error("please switch to correct chain:" + net_config.chain_name);
     } else {
-      console.log("msn_balanceOf err handler:", msn_balanceOf_result.err.message);
+      toast.error("get balance err:", msn_balanceOf_result.err.message);
     }
   }
 }
@@ -82,10 +82,14 @@ async function doStake() {
     return;
   }
 
+  if (toStakeAmount.value == NaN || parseFloat(toStakeAmount.value) <= 0) {
+    toast.error("stake amount err");
+    return;
+  }
+
   // stake amount
   let stake_amount_bn = new BigNumber(toStakeAmount.value);
   stake_amount_bn = stake_amount_bn.times(1e18);
-  console.log(stake_amount_bn.toFixed(0));
   var stake_amount_str = stake_amount_bn.toFixed(0);
 
   // check allowance
@@ -96,7 +100,6 @@ async function doStake() {
     walletAccount.value,
     net_config.stake_contract_address
   );
-  console.log(allow_result);
   if (allow_result.err === false) {
     // check amount
     let allow_amount_bn = new BigNumber(allow_result.result.toString());
@@ -116,7 +119,6 @@ async function doStake() {
         return;
       }
 
-      console.log("need approve");
       // do approve
       if (!(await getWalletAccount())) {
         return;
@@ -130,7 +132,6 @@ async function doStake() {
         msnBalanceInWallet.value
       );
       hideWalletProcess();
-      console.log(result);
       if (result.result === true) {
         toast.success("approved");
       } else {
@@ -148,13 +149,12 @@ async function doStake() {
   var stake_stake_result = await contract_call.stake_stake(net_config.chain_id, net_config.stake_contract_address, stake_abi, stake_amount_str);
   //hide loading page
   hideWalletProcess();
-  console.log(stake_stake_result);
 
   if (stake_stake_result.err === false) {
     //actually you need to check the err if allowance is not enough
     //you need to make the user approve with a large amount
     //the suggest value is 10000000*10^18
-    console.log("stake_stake_result:", stake_stake_result.result);
+    // console.log("stake_stake_result:", stake_stake_result.result);
     refreshStakeData();
     stakeWinVisible.value = false;
     toStakeAmount.value = null;
@@ -182,9 +182,14 @@ async function doUnstake() {
     return;
   }
 
+  if (unstakeAmount.value == NaN || parseFloat(unstakeAmount.value) <= 0) {
+    toast.error("unstake amount err");
+    return;
+  }
+
   let unstake_amount_bn = new BigNumber(unstakeAmount.value);
   unstake_amount_bn = unstake_amount_bn.times(1e18);
-  console.log(unstake_amount_bn.toFixed(0));
+  // console.log(unstake_amount_bn.toFixed(0));
   var unstake_amount_str = unstake_amount_bn.toFixed(0);
 
   // show loading page
@@ -194,7 +199,7 @@ async function doUnstake() {
   hideWalletProcess();
 
   if (stake_unstake_result.err === false) {
-    console.log("stake_unstake_result:", stake_unstake_result.result);
+    // console.log("stake_unstake_result:", stake_unstake_result.result);
     toast.success("success");
 
     // do something
@@ -203,9 +208,9 @@ async function doUnstake() {
     unstakeAmount.value = null;
   } else {
     if (stake_unstake_result.err.message == "chain_id error") {
-      console.log("please switch to correct chain:" + net_config.chain_name);
+      toast.error("please switch to correct chain:" + net_config.chain_name);
     } else {
-      console.log("stake_unstake err handler:", stake_unstake_result.err.message);
+      // console.log("stake_unstake err handler:", stake_unstake_result.err.message);
       toast.error("unstake err:", stake_unstake_result.err.message);
     }
   }
@@ -228,14 +233,14 @@ async function getCreditRewardSpeed() {
   );
 
   if (get_credit_reward_speed_result.err === false) {
-    console.log("get_credit_reward_speed_result:", get_credit_reward_speed_result.result);
+    // console.log("get_credit_reward_speed_result:", get_credit_reward_speed_result.result);
     creditRewardSpeed.value = get_credit_reward_speed_result.result.toString();
-    console.log(creditRewardSpeed.value);
+    // console.log(creditRewardSpeed.value);
   } else {
     if (get_credit_reward_speed_result.err.message == "chain_id error") {
-      console.log("please switch to correct chain:" + net_config.chain_name);
+      toast.error("please switch to correct chain:" + net_config.chain_name);
     } else {
-      console.log("get_credit_reward_speed err handler:", get_credit_reward_speed_result.err.message);
+      toast.error("get credit reward  speed err handler:", get_credit_reward_speed_result.err.message);
     }
   }
 }
@@ -249,14 +254,14 @@ const getStakeToken = async () => {
   var stake_get_stake_token_result = await contract_call.stake_get_stake_token(net_config.chain_id, walletAccount.value, net_config.stake_contract_address, stake_abi);
 
   if (stake_get_stake_token_result.err === false) {
-    console.log("stake_get_stake_token_result:", stake_get_stake_token_result.result);
+    // console.log("stake_get_stake_token_result:", stake_get_stake_token_result.result);
     stakeTokenAmount.value = stake_get_stake_token_result.result.toString();
-    console.log(stakeTokenAmount.value);
+    // console.log(stakeTokenAmount.value);
   } else {
     if (stake_get_stake_token_result.err.message == "chain_id error") {
-      console.log("please switch to correct chain:" + net_config.chain_name);
+      toast.error("please switch to correct chain:" + net_config.chain_name);
     } else {
-      console.log("stake_get_stake_token err handler:", stake_get_stake_token_result.err.message);
+      toast.error("stake_get_stake_token err handler:", stake_get_stake_token_result.err.message);
     }
   }
 };
@@ -275,13 +280,13 @@ const getStakeLastTime = async () => {
   );
 
   if (stake_get_stake_last_time_result.err === false) {
-    console.log("stake_get_stake_last_time_result:", stake_get_stake_last_time_result.result.toString());
+    // console.log("stake_get_stake_last_time_result:", stake_get_stake_last_time_result.result.toString());
     lastStakeTime = parseInt(stake_get_stake_last_time_result.result.toString());
   } else {
     if (stake_get_stake_last_time_result.err.message == "chain_id error") {
-      console.log("please switch to correct chain:" + net_config.chain_name);
+      toast.error("please switch to correct chain:" + net_config.chain_name);
     } else {
-      console.log("stake_get_stake_last_time err handler:", stake_get_stake_last_time_result.err.message);
+      toast.error("stake_get_stake_last_time err handler:", stake_get_stake_last_time_result.err.message);
     }
   }
 };
@@ -294,13 +299,13 @@ const getCredit = async () => {
   var stake_get_credit_result = await contract_call.stake_get_credit(net_config.chain_id, walletAccount.value, net_config.stake_contract_address, stake_abi);
 
   if (stake_get_credit_result.err === false) {
-    console.log("stake_get_credit_result:", stake_get_credit_result.result.toString());
+    // console.log("stake_get_credit_result:", stake_get_credit_result.result.toString());
     credit.value = stake_get_credit_result.result.toString();
   } else {
     if (stake_get_credit_result.err.message == "chain_id error") {
-      console.log("please switch to correct chain:" + net_config.chain_name);
+      toast.error("please switch to correct chain:" + net_config.chain_name);
     } else {
-      console.log("stake_get_credit err handler:", stake_get_credit_result.err.message);
+      toast.error("stake_get_credit err handler:", stake_get_credit_result.err.message);
     }
   }
 };
@@ -309,12 +314,12 @@ const getTotalCredit = async () => {
   var stake_get_total_credit_result = await contract_call.stake_get_total_credit(net_config.chain_id, net_config.stake_contract_address, stake_abi);
 
   if (stake_get_total_credit_result.err === false) {
-    console.log("stake_get_total_credit_result:", stake_get_total_credit_result.result.toString());
+    // console.log("stake_get_total_credit_result:", stake_get_total_credit_result.result.toString());
   } else {
     if (stake_get_total_credit_result.err.message == "chain_id error") {
-      console.log("please switch to correct chain:" + net_config.chain_name);
+      toast.error("please switch to correct chain:" + net_config.chain_name);
     } else {
-      console.log("stake_get_total_credit err handler:", stake_get_total_credit_result.err.message);
+      toast.error("stake_get_total_credit err handler:", stake_get_total_credit_result.err.message);
     }
   }
 };
@@ -346,7 +351,7 @@ const harvest = async () => {
     refreshStakeData();
   } else {
     if (stake_harvest_result.err.message == "chain_id error") {
-      console.log("please switch to correct chain:" + net_config.chain_name);
+      toast.error("please switch to correct chain:" + net_config.chain_name);
     } else {
       // console.log("stake_harvest err handler:", stake_harvest_result.err.message);
       toast.error("harvest err ", stake_harvest_result.err.message);
@@ -369,6 +374,21 @@ function refreshStakeData() {
 
 //////// page init ////////
 onMounted(async () => {
+  if (!(await wallet_call.checkWallet())) {
+    await swal.fire({
+      icon: "error",
+      title: "Wallet Error",
+      html: `A wallet extension is required , e.g:  <a href="https://www.okx.com/web3/?utm_source=mesonnetwork"  target="_blank" style="color: blue">OKX Wallet</a> or <a href="https://metamask.io/?utm_source=mesonnetwork"  target="_blank" style="color: blue">MetaMask</a>. <br/>If you're viewing this page on mobile phone, please open this page in the wallet app's browser. </div>`,
+      showDenyButton: false,
+      showCancelButton: false,
+      showConfirmButton: true,
+      confirmButtonText: "OK",
+      cancelButtonText: "Cancel",
+      denyButtonText: "",
+    });
+    return;
+  }
+
   if (net_config.chain_id) {
     await wallet_call.switchNetwork(net_config.chain_id);
     await getWalletAccount();
@@ -419,7 +439,6 @@ onBeforeUnmount(() => {});
 
             <!-- Pricing tables -->
             <div class="max-w-sm mx-auto grid gap-8 lg:grid-cols-2 lg:gap-6 items-start lg:max-w-none pt-4">
-              
               <!-- Pricing table 2 -->
               <div class="relative flex flex-col h-full p-6 bg-gray-800">
                 <div class="absolute top-0 right-0 mr-6 -mt-4">
@@ -437,20 +456,23 @@ onBeforeUnmount(() => {});
                   <div class="text-gray-400 mb-6"></div>
                   <div class="text-lg font-semibold mb-1">Stake Token</div>
                   <div class="flex justify-between">
-    <!--  -->
-    <div class="font-uncut-sans inline-flex items-baseline mb-4">
-        <span class="text-3xl font-medium text-gray-400"></span>
-        <span class="text-4xl font-bold leading-7">{{ tokenAmountParser.parserToMoneyFormat(stakeTokenAmount, 18, 8, 8) }}</span>
-        <!-- <span class="font-medium text-gray-400">.00</span> -->
-    </div>
-    
-    <!--  -->
-    <div class="font-uncut-sans flex items-center mb-4">
-        <svg id="rotateIcon" class="icon w-6 h-6 text-white cursor-pointer transition duration-300 transform hover:rotate-180" viewBox="0 0 1024 1024">
-            <path d="M760.762906 345.436286a335.431549 335.431549 0 1 0 84.888678 228.350545l119.511133-32.015159A454.275699 454.275699 0 1 1 648.709851 136.00379L605.174086 60.63477l105.019422-60.63477L889.733062 310.935102z" fill="#ffffff"></path>
-        </svg>
-    </div>
-</div>
+                    <!--  -->
+                    <div class="font-uncut-sans inline-flex items-baseline mb-4">
+                      <span class="text-3xl font-medium text-gray-400"></span>
+                      <span class="text-4xl font-bold leading-7">{{ tokenAmountParser.parserToMoneyFormat(stakeTokenAmount, 18, 8, 8) }}</span>
+                      <!-- <span class="font-medium text-gray-400">.00</span> -->
+                    </div>
+
+                    <!--  -->
+                    <div class="font-uncut-sans flex items-center mb-4" @click="getStakeToken()">
+                      <svg id="rotateIcon" class="icon w-6 h-6 text-white cursor-pointer transition duration-300 transform hover:rotate-180" viewBox="0 0 1024 1024">
+                        <path
+                          d="M760.762906 345.436286a335.431549 335.431549 0 1 0 84.888678 228.350545l119.511133-32.015159A454.275699 454.275699 0 1 1 648.709851 136.00379L605.174086 60.63477l105.019422-60.63477L889.733062 310.935102z"
+                          fill="#ffffff"
+                        ></path>
+                      </svg>
+                    </div>
+                  </div>
 
                   <div class="text-gray-400 mb-6"></div>
                   <a class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group" @click="toStake()">
@@ -489,7 +511,6 @@ onBeforeUnmount(() => {});
                   </a>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -541,8 +562,6 @@ onBeforeUnmount(() => {});
 
       <template v-slot:body> Processing wallet... </template>
     </Modal>
-
-
 
     <!-- <div>reward speed:{{ tokenAmountParser.parserToMoneyFormat(creditRewardSpeed, 18, 8, 8) }}</div>
     <div>unharvest credit:{{ tokenAmountParser.parserToMoneyFormat(unharvestCredit, 18, 8, 8) }}</div>
