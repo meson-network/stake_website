@@ -419,6 +419,7 @@ onBeforeUnmount(() => {});
 
             <!-- Pricing tables -->
             <div class="max-w-sm mx-auto grid gap-8 lg:grid-cols-2 lg:gap-6 items-start lg:max-w-none pt-4">
+              
               <!-- Pricing table 2 -->
               <div class="relative flex flex-col h-full p-6 bg-gray-800">
                 <div class="absolute top-0 right-0 mr-6 -mt-4">
@@ -435,14 +436,22 @@ onBeforeUnmount(() => {});
                   <div class="text-lg font-semibold mb-1">Stake</div>
                   <div class="text-gray-400 mb-6"></div>
                   <div class="text-lg font-semibold mb-1">Stake Token</div>
-                  <div class="font-uncut-sans inline-flex items-baseline mb-4">
-                    <span class="text-3xl font-medium text-gray-400"></span>
-                    <span class="text-4xl font-bold leading-7">{{ tokenAmountParser.parserToMoneyFormat(stakeTokenAmount, 18, 8, 8) }}</span>
-                    <!-- <span class="font-medium text-gray-400">.00</span> -->
-                  </div>
-                  <div class="font-uncut-sans inline-flex items-center mb-4">
-                    <svg t="1713661604633" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4228" width="24" height="24"><path d="M760.762906 345.436286a335.431549 335.431549 0 1 0 84.888678 228.350545l119.511133-32.015159A454.275699 454.275699 0 1 1 648.709851 136.00379L605.174086 60.63477l105.019422-60.63477L889.733062 310.935102z" fill="#ffffff" p-id="4229"></path></svg>
-                  </div>
+                  <div class="flex justify-between">
+    <!--  -->
+    <div class="font-uncut-sans inline-flex items-baseline mb-4">
+        <span class="text-3xl font-medium text-gray-400"></span>
+        <span class="text-4xl font-bold leading-7">{{ tokenAmountParser.parserToMoneyFormat(stakeTokenAmount, 18, 8, 8) }}</span>
+        <!-- <span class="font-medium text-gray-400">.00</span> -->
+    </div>
+    
+    <!--  -->
+    <div class="font-uncut-sans flex items-center mb-4">
+        <svg id="rotateIcon" class="icon w-6 h-6 text-white cursor-pointer transition duration-300 transform hover:rotate-180" viewBox="0 0 1024 1024">
+            <path d="M760.762906 345.436286a335.431549 335.431549 0 1 0 84.888678 228.350545l119.511133-32.015159A454.275699 454.275699 0 1 1 648.709851 136.00379L605.174086 60.63477l105.019422-60.63477L889.733062 310.935102z" fill="#ffffff"></path>
+        </svg>
+    </div>
+</div>
+
                   <div class="text-gray-400 mb-6"></div>
                   <a class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group" @click="toStake()">
                     Stake
