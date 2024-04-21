@@ -420,7 +420,7 @@ onBeforeUnmount(() => {});
             <!-- Pricing tables -->
             <div class="max-w-sm mx-auto grid gap-8 lg:grid-cols-2 lg:gap-6 items-start lg:max-w-none pt-4">
               <!-- Pricing table 2 -->
-              <div class="relative flex flex-col h-full p-6 bg-gray-800" data-aos="zoom-out" data-aos-delay="100">
+              <div class="relative flex flex-col h-full p-6 bg-gray-800">
                 <div class="absolute top-0 right-0 mr-6 -mt-4">
                   <div class="inline-flex items-center text-sm font-semibold py-1 px-3 text-emerald-600 bg-emerald-200 rounded-full">
                     <svg class="fill-emerald-500 mr-2" width="12" height="14" xmlns="http://www.w3.org/2000/svg">
@@ -456,7 +456,7 @@ onBeforeUnmount(() => {});
                 </div>
               </div>
 
-              <div class="relative flex flex-col h-full p-6 bg-gray-800" data-aos="zoom-out" data-aos-delay="100">
+              <div class="relative flex flex-col h-full p-6 bg-gray-800">
                 <div class="absolute top-0 right-0 mr-6 -mt-4"></div>
                 <div class="mb-6">
                   <div class="text-lg font-semibold mb-1">Harvest</div>
