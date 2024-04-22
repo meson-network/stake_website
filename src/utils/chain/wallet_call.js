@@ -1,15 +1,16 @@
 import { ethers } from "ethers";
 
 async function checkWallet() {
-  try {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    if (provider !== null) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (error) {
+  if (window.ethereum) {
+    return true;
+  } else {
     return false;
+  }
+}
+
+async function onAccountChanged(onChange) {
+  if (window.ethereum) {
+    window.ethereum.on("accountsChanged", onChange);
   }
 }
 
@@ -35,4 +36,5 @@ async function switchNetwork(chainId) {
 export default {
   checkWallet,
   switchNetwork,
+  onAccountChanged,
 };
