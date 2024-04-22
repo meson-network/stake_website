@@ -1,5 +1,4 @@
 <script setup>
-import Header from "./Header.vue";
 // chain
 import net_config from "@/utils/chain/testnet/sepolia_config";
 import msn_abi from "@/utils/chain/abi/msn.abi.json";
