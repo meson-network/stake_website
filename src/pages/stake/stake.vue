@@ -604,7 +604,7 @@ onBeforeUnmount(() => { });
         </div>
 
         <div class="max-w-6xl mx-auto  ">
-          <div class="py-20 md:py-25 border-t border-gray-800"
+          <div class="py-20 md:py-25 border-t border-gray-800 md:px-10"
             style="background-color: #00000087; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
             <!-- Section header -->
             <div class="max-w-3xl mx-auto text-center pb-12 md:pb-20">
@@ -618,9 +618,9 @@ onBeforeUnmount(() => { });
             </div>
 
             <!-- Pricing tables -->
-            <div class="max-w-sm mx-auto grid gap-8 lg:grid-cols-2 lg:gap-6 items-start lg:max-w-none pt-4" style="margin: 30px;">
+            <div class="max-w-sm mx-auto grid gap-8 lg:grid-cols-2 lg:gap-6 items-start lg:max-w-none pt-4" >
               <!-- Pricing table 2 -->
-              <div class="relative flex flex-col h-full p-6 bg-gray-800" style="border-radius: 10px; margin: 20px;box-shadow: rgb(31, 31, 31) 3px 3px 3px;">
+              <div class="relative flex flex-col h-full p-6 bg-gray-800" style="border-radius: 10px;box-shadow: rgb(31, 31, 31) 3px 3px 3px;">
                 <div class="absolute top-0 right-0 mr-6 -mt-4">
                   <div
                     class="inline-flex items-center text-sm font-semibold py-1 px-3 text-emerald-600 bg-emerald-200 rounded-full">
@@ -684,7 +684,7 @@ onBeforeUnmount(() => { });
                 </div>
               </div>
 
-              <div class="relative flex flex-col h-full p-6 bg-gray-800" style="border-radius: 10px;margin: 20px;box-shadow: 3px 3px 3px #1f1f1f;">
+              <div class="relative flex flex-col h-full p-6 bg-gray-800" style="border-radius: 10px; box-shadow: 3px 3px 3px #1f1f1f;">
                 <div class="absolute top-0 right-0 mr-6 -mt-4"></div>
                 <div class="mb-6">
                   <div class="text-lg font-semibold mb-1" style="    border-bottom: 1px solid #404d5e;
