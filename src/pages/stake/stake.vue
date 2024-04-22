@@ -542,7 +542,7 @@ onBeforeUnmount(() => { });
                       {{ walletAccount }}
                     </div>
                   </div>
-                  <div class="text-lg font-semibold  mt-6 mb-2">STAKE TOKE</div>
+                  <div class="text-lg font-semibold  mt-6 mb-2">STAKE TOKEN</div>
                   <div class="flex justify-between">
                     <!--  -->
                     <div class="font-uncut-sans inline-flex items-baseline mb-4">
