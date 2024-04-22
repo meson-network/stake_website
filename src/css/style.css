@@ -23,3 +23,9 @@
     cursor: pointer;
 }
 
+.xlander_text{
+    border-bottom: 3px solid white;
+}
+.xlander_text:hover{
+    color: #b6dcef;
+}

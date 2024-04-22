@@ -608,7 +608,7 @@ onBeforeUnmount(() => { });
             style="background-color: #00000087; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
             <!-- Section header -->
             <div class="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-              <h2 class="h2 font-uncut-sans mb-4" style="color: white;">XLander.IO Next Layer1</h2>
+              <h2 class="h2 font-uncut-sans mb-4" style="color: white;"><a class="xlander_text" href="https://xlander.io">XLander.IO</a> Next Layer1</h2>
               <div class="max-w-2xl mx-auto">
                 <p class="text-xl text-white" style="font-weight: bold;">Staking Meson.Network's MainNet token (MSN)
                   will grant credits, which will be
