@@ -539,13 +539,13 @@ onBeforeUnmount(() => { });
                   <div class="text-lg font-semibold mb-1" style="    border-bottom: 1px solid #404d5e;padding-bottom: 5px;">STAKE</div>
                   <div class="text-gray-400 mb-6"></div>
 
-                  <div style="font-size: 12px;">
+                  <div  >
                     <div v-if="walletAccount == ''" @click="connectWallet"
-                      class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group">
+                      class="wallet_btn btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group">
                       Connect wallet
                     </div>
                     <div v-if="walletAccount != ''"
-                      class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 w-full shadow-lg group">
+                      class="wallet_btn btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 w-full shadow-lg group">
                       {{ walletAccount }}
                     </div>
                   </div>

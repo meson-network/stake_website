@@ -38,6 +38,11 @@ body{
     background-color: black !important;
 }
 
+.wallet_btn{
+    word-break: break-all;
+    word-wrap: break-word;
+    text-align: center;
+}
 @media screen and (max-width: 640px) {
     .harvestbg {
         width: 160%;
