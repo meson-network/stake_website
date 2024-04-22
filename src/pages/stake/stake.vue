@@ -504,10 +504,17 @@ onBeforeUnmount(() => { });
           <div class="py-20 md:py-25 border-t border-gray-800 md:px-10"
             style="background-color: #00000087; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
             <!-- Section header -->
-            <div class="max-w-3xl mx-auto text-center pb-12 md:pb-20">
+            <div class=" mx-auto text-center pb-12 md:pb-20">
               <h2 class="h2 font-uncut-sans mb-4" style="color: white;"><a class="xlander_text" href="https://xlander.io">XLander.IO</a> Next Layer1</h2>
-              <div class="max-w-2xl mx-auto">
-                <p class="text-xl text-white" style="font-weight: bold;">Staking Meson.Network's MainNet token (MSN)
+              <div class="mx-auto">
+                <p class="text-xl text-white" style="font-size: 18px;
+    background-color: #ffffff0d;
+    margin: 0px 20px;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 10px 10px;
+    border-radius: 5px;
+    border: 1px solid #9c9c9c;">Staking Meson.Network's MainNet token (MSN)
                   will grant credits, which will be
                   mapped into <span style="font-size: 25px;">100%</span> of the XLander's <span
                     style="font-size: 25px;">SEED</span> round.</p>
@@ -515,7 +522,7 @@ onBeforeUnmount(() => { });
             </div>
 
             <!-- Pricing tables -->
-            <div class="max-w-sm mx-auto grid gap-8 lg:grid-cols-2 lg:gap-6 items-start lg:max-w-none pt-4" >
+            <div class=" mx-auto grid gap-8 lg:grid-cols-2 lg:gap-6 items-start lg:max-w-none pt-4" style="margin: 0px 20px;">
               <!-- Pricing table 2 -->
               <div class="relative flex flex-col h-full p-6 bg-gray-800" style="border-radius: 10px;box-shadow: rgb(31, 31, 31) 3px 3px 3px;">
                 <div class="absolute top-0 right-0 mr-6 -mt-4">
@@ -532,7 +539,7 @@ onBeforeUnmount(() => { });
                   <div class="text-lg font-semibold mb-1" style="    border-bottom: 1px solid #404d5e;padding-bottom: 5px;">STAKE</div>
                   <div class="text-gray-400 mb-6"></div>
 
-                  <div>
+                  <div style="font-size: 12px;">
                     <div v-if="walletAccount == ''" @click="connectWallet"
                       class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group">
                       Connect wallet
