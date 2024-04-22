@@ -8,12 +8,6 @@ async function checkWallet() {
   }
 }
 
-async function onAccountChanged(onChange) {
-  if (window.ethereum) {
-    window.ethereum.on("accountsChanged", onChange);
-  }
-}
-
 async function switchNetwork(chainId) {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const network = await provider.getNetwork();
@@ -29,7 +23,23 @@ async function switchNetwork(chainId) {
     return true;
   } catch (e) {
     console.log("switch failed", e);
-    return e;
+    return false;
+  }
+}
+
+async function onAccountChanged(onChange) {
+  if (window.ethereum) {
+    window.ethereum.on("accountsChanged", onChange);
+  }
+}
+
+async function getChainId() {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const network = await provider.getNetwork();
+    return network.chainId;
+  } catch (error) {
+    return 0;
   }
 }
 
@@ -37,4 +47,5 @@ export default {
   checkWallet,
   switchNetwork,
   onAccountChanged,
+  getChainId,
 };

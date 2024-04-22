@@ -1,5 +1,4 @@
 <script setup>
-import Header from "./Header.vue";
 // chain
 import net_config from "@/utils/chain/testnet/sepolia_config";
 import msn_abi from "@/utils/chain/abi/msn.abi.json";
@@ -69,7 +68,8 @@ async function getMsnBalanceInWallet() {
 
 let toStakeAmount = ref(null);
 async function toStake() {
-  if (walletAccount.value === "") {
+  if (walletAccount.value == "") {
+    toast.error("please connect wallet first");
     return;
   }
 
@@ -78,10 +78,6 @@ async function toStake() {
 }
 
 async function doStake() {
-  if (walletAccount.value === "") {
-    return;
-  }
-
   if (toStakeAmount.value == NaN || parseFloat(toStakeAmount.value) <= 0) {
     toast.error("stake amount err");
     return;
@@ -171,17 +167,15 @@ async function doStake() {
 
 let unstakeAmount = ref(null);
 async function toUnstake() {
-  if (walletAccount.value === "") {
+  if (walletAccount.value == "") {
+    toast.error("please connect wallet first");
     return;
   }
 
   unstakeWinVisible.value = true;
 }
-async function doUnstake() {
-  if (walletAccount.value === "") {
-    return;
-  }
 
+async function doUnstake() {
   if (unstakeAmount.value == NaN || parseFloat(unstakeAmount.value) <= 0) {
     toast.error("unstake amount err");
     return;
@@ -248,6 +242,7 @@ async function getCreditRewardSpeed() {
 let stakeTokenAmount = ref("");
 const getStakeToken = async () => {
   if (walletAccount.value === "") {
+    toast.error("please connect wallet first");
     return;
   }
 
@@ -294,6 +289,7 @@ const getStakeLastTime = async () => {
 let credit = ref("");
 const getCredit = async () => {
   if (walletAccount.value === "") {
+    toast.error("please connect wallet first");
     return;
   }
   var stake_get_credit_result = await contract_call.stake_get_credit(net_config.chain_id, walletAccount.value, net_config.stake_contract_address, stake_abi);
@@ -339,6 +335,11 @@ async function refreshUnharvestCredit() {
 }
 
 const harvest = async () => {
+  if (walletAccount.value == "") {
+    toast.error("please connect wallet first");
+    return;
+  }
+
   // show loading page
   showWalletProcess();
   var stake_harvest_result = await contract_call.stake_harvest(net_config.chain_id, net_config.stake_contract_address, stake_abi);
@@ -359,7 +360,16 @@ const harvest = async () => {
   }
 };
 
-function refreshStakeData() {
+async function refreshStakeData() {
+  if (walletAccount.value === "") {
+    toast.error("please connect wallet first");
+    return;
+  }
+
+  if ((await wallet_call.getChainId()) != net_config.chain_id) {
+    return;
+  }
+
   // get stake token
   getStakeToken();
 
@@ -372,19 +382,39 @@ function refreshStakeData() {
   getStakeLastTime();
 }
 
+let timer = null;
 async function connectWallet() {
-  await wallet_call.switchNetwork(net_config.chain_id);
-  await getWalletAccount();
-  if (walletAccount.value != "") {
-    refreshStakeData();
-    setInterval(() => {
-      refreshUnharvestCredit();
-    }, 1000);
+  if (!(await chainPreCheck())) {
+    return;
   }
+
+  refreshStakeData();
+
+  if (timer !== null) {
+    clearInterval(timer);
+    timer = null;
+  }
+  timer = setInterval(() => {
+    refreshUnharvestCredit();
+  }, 1000);
+
+  wallet_call.onAccountChanged(async (accounts) => {
+    if (accounts.length == 0) {
+      walletAccount.value = "";
+      return;
+    }
+    await getWalletAccount();
+    refreshStakeData();
+  });
 }
 
-//////// page init ////////
-onMounted(async () => {
+async function checkChainCorrect() {
+  let chainId = await wallet_call.getChainId();
+  return chainId == net_config.chain_id;
+}
+
+async function chainPreCheck() {
+  // check wallet
   if (!(await wallet_call.checkWallet())) {
     await swal.fire({
       icon: "error",
@@ -397,48 +427,47 @@ onMounted(async () => {
       cancelButtonText: "Cancel",
       denyButtonText: "",
     });
-    return;
+    return false;
   }
 
+  // check chain
   if (net_config.chain_id) {
     await wallet_call.switchNetwork(net_config.chain_id);
-    await getWalletAccount();
-    if (walletAccount.value == "") {
+    if (!(await checkChainCorrect())) {
       await swal.fire({
         title: "",
-        html: `Your wallet is not detected, please connect the correct wallet`,
+        html: `Chain error,  please switch to the correct chain`,
         showDenyButton: false,
         showCancelButton: false,
         showConfirmButton: true,
         confirmButtonText: "OK",
         denyButtonText: "",
       });
-
-      return;
+      return false;
     }
-
-    wallet_call.onAccountChanged(async (accounts) => {
-      await getWalletAccount();
-      refreshStakeData();
-    });
-
-    // confirm wallet address
-    // await swal.fire({
-    //   title: "",
-    //   html: `<div class='mb-2 p-3 bg-slate-200 text-sm rounded font-bold'>${walletAccount.value}</div><div>Please confirm your current wallet address, please switch to the correct wallet and refresh the page if the address is wrong.<div>`,
-    //   showDenyButton: false,
-    //   showCancelButton: false,
-    //   showConfirmButton: true,
-    //   confirmButtonText: "Confirm",
-    //   denyButtonText: "",
-    // });
-
-    refreshStakeData();
-
-    setInterval(() => {
-      refreshUnharvestCredit();
-    }, 1000);
   }
+
+  // account
+  await getWalletAccount();
+  if (walletAccount.value == "") {
+    await swal.fire({
+      title: "",
+      html: `Your account not detected, please connect the correct account`,
+      showDenyButton: false,
+      showCancelButton: false,
+      showConfirmButton: true,
+      confirmButtonText: "OK",
+      denyButtonText: "",
+    });
+    return false;
+  }
+
+  return true;
+}
+
+//////// page init ////////
+onMounted(async () => {
+  connectWallet();
 });
 onBeforeUnmount(() => {});
 </script>
@@ -741,29 +770,5 @@ onBeforeUnmount(() => {});
 
       <template v-slot:body> <div style="color: black">Processing wallet...</div> </template>
     </Modal>
-
-    <!-- <div>reward speed:{{ tokenAmountParser.parserToMoneyFormat(creditRewardSpeed, 18, 8, 8) }}</div>
-    <div>unharvest credit:{{ tokenAmountParser.parserToMoneyFormat(unharvestCredit, 18, 8, 8) }}</div>
-    <button @click="getCreditRewardSpeed()" class="btn-primary">get_credit_reward_speed</button>
-
-    <div class="mt-3 mb-3">---------------------</div>
-
-    <div>stake token:{{ tokenAmountParser.parserToMoneyFormat(stakeTokenAmount, 18, 8, 8) }}</div>
-    <button @click="getStakeToken()" class="btn-primary">stake_get_stake_token</button>
-
-    <div class="mt-3 mb-3">---------------------</div>
-
-    <div>reward credit:{{ tokenAmountParser.parserToMoneyFormat(credit, 18, 8, 8) }}</div>
-    <button @click="getCredit()" class="btn-primary">stake_get_credit</button>
-
-    <div class="mt-3 mb-3">---------------------</div>
-
-    <button @click="toStake()" class="btn-primary">stake_stake</button>
-    <button @click="toUnstake()" class="btn-primary">stake_unstake</button>
-    <button @click="harvest()" class="btn-primary">stake_harvest</button>
-
-    <div class="mt-3 mb-3">---------other------------</div>
-    <button @click="getStakeLastTime()" class="btn-primary">stake_get_stake_last_time</button>
-    <button @click="getTotalCredit()" class="btn-primary">stake_get_total_credit</button> -->
   </div>
 </template>
