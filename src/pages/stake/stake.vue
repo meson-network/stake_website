@@ -477,10 +477,10 @@ onBeforeUnmount(() => { });
     <!-- Site header -->
     <header class="absolute w-full z-30">
       <div class="max-w-6xl mx-auto  ">
-        <div class="flex items-center justify-between h-16 md:h-20" style="padding: 0px 50px;">
+        <div class="flex items-center justify-between h-16 md:h-20 md:px-10">
           <!-- Site branding -->
 
-          <div class="shrink-0 mr-4" style="max-width: 100%;">
+          <div class="shrink-0 mr-4" style="max-width: 100%; margin: 0px 20px;">
             <!-- Logo -->
             <router-link class="block" to="/" aria-label="Cruip">
               <img src="../../images/mxlogo.svg" style="max-width: 100%;" />
@@ -496,41 +496,38 @@ onBeforeUnmount(() => { });
     <main class="grow">
       <section class="relative">
         <!-- Illustration -->
-        <div class="harvestbg lg:block absolute top-0   -z-10"  aria-hidden="true">
+        <div class="harvestbg lg:block absolute top-0   -z-10" aria-hidden="true">
           <img src="../../images/harvest_bg.jpg" class="max-w-none" alt="Pricing Illustration" style="width:100%" />
         </div>
 
         <div class="max-w-6xl mx-auto  ">
           <div class="py-20 md:py-25 border-t border-gray-800 md:px-10"
-            style="background-color: #00000087; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+            style="background-color: rgb(0 0 0 / 82%);  border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
             <!-- Section header -->
-            <div class=" mx-auto text-center pb-12 md:pb-20">
-              <h2 class="h2 font-uncut-sans mb-4" style="color: white;"><a class="xlander_text" href="https://xlander.io">XLander.IO</a> Next Layer1</h2>
-              <div class="mx-auto">
-                <p class="text-xl text-white" style="font-size: 18px;
-    background-color: #ffffff0d;
-    margin: 0px 20px;
-    color: #ffffff;
-    font-weight: bold;
-    padding: 10px 10px;
-    border-radius: 5px;
-    border: 1px solid #9c9c9c;">Staking Meson.Network's MainNet token (MSN)
-                  will grant credits, which will be
-                  mapped into <span style="font-size: 25px;">100%</span> of the XLander's <span
-                    style="font-size: 25px;">SEED</span> round.</p>
-              </div>
+            <div class=" mx-auto  pb-12 md:pb-20" style="margin: 20px 20px;">
+              <h2 class="h2 font-uncut-sans" style="color: white;"><a class="xlander_text"
+                  href="https://xlander.io">XLander.IO</a> Next Layer1</h2>
+
+              <p class="text-white text-left mt-2" style="font-size: 15px;font-weight: bold;border-radius: 5px;">Staking
+                Meson.Network's MainNet token (MSN)
+                will grant credits, which will be
+                mapped into <span style=" ">100%</span> of the XLander's <span style=" ">SEED</span> round.</p>
+
             </div>
 
             <!-- Pricing tables -->
-            <div class=" mx-auto grid gap-8 lg:grid-cols-2 lg:gap-6 items-start lg:max-w-none pt-4" style="margin: 0px 20px;">
+            <div class=" mx-auto grid gap-8 lg:grid-cols-2 lg:gap-6 items-start lg:max-w-none pt-4"
+              style="margin: 0px 20px;">
               <!-- Pricing table 2 -->
-              <div class="relative flex flex-col h-full p-6 " style="border-radius: 10px;box-shadow: rgb(29 29 29) 3px 3px 3px;background-color: #242424; ">
-                
+              <div class="relative flex flex-col h-full p-6 "
+                style="border-radius: 10px;box-shadow: black 3px 3px 3px;background-color: black; ">
+
                 <div class="mb-6">
-                  <div class="text-lg font-semibold mb-1" style="    border-bottom: 1px solid #404d5e;padding-bottom: 5px;">STAKE</div>
+                  <div class="text-lg font-semibold mb-1"
+                    style="    border-bottom: 1px solid   rgb(49 49 49);padding-bottom: 5px;">STAKE</div>
                   <div class="text-gray-400 mb-6"></div>
 
-                  <div  >
+                  <div>
                     <div v-if="walletAccount == ''" @click="connectWallet"
                       class="wallet_btn btn-sm text-black bg-gradient-to-t from-yellow-600 to-yellow-500 hover:to-yellow-400 w-full shadow-lg group">
                       Connect Wallet
@@ -579,10 +576,11 @@ onBeforeUnmount(() => { });
                 </div>
               </div>
 
-              <div class="relative flex flex-col h-full p-6 " style="border-radius: 10px;  box-shadow: rgb(29 29 29) 3px 3px 3px;background-color: #242424; ">
+              <div class="relative flex flex-col h-full p-6 "
+                style="border-radius: 10px;  box-shadow: black 3px 3px 3px;background-color: black; ">
                 <div class="absolute top-0 right-0 mr-6 -mt-4"></div>
                 <div class="mb-6">
-                  <div class="text-lg font-semibold mb-1" style="    border-bottom: 1px solid #404d5e;
+                  <div class="text-lg font-semibold mb-1" style="    border-bottom: 1px solid  rgb(49 49 49);;
     padding-bottom: 5px;">HARVEST</div>
                   <div class="text-gray-400 mb-4"></div>
                   <div class="text-lg font-semibold mb-2">UNHARVEST CREDIT</div>
