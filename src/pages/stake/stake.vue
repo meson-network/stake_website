@@ -502,7 +502,7 @@ onBeforeUnmount(() => { });
 
         <div class="max-w-6xl mx-auto  ">
           <div class="py-20 md:py-25 border-t border-gray-800 md:px-10"
-            style="background-color: rgb(0 0 0 / 82%);  border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+            style="background-color: rgb(0 0 0 / 65%);  border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
             <!-- Section header -->
             <div class=" mx-auto  pb-12 md:pb-15" style="margin: 20px 20px;">
               <h2 class="h2 font-uncut-sans" style="color: white;"><a class="xlander_text"
