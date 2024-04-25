@@ -524,28 +524,19 @@ onBeforeUnmount(() => { });
             <!-- Pricing tables -->
             <div class=" mx-auto grid gap-8 lg:grid-cols-2 lg:gap-6 items-start lg:max-w-none pt-4" style="margin: 0px 20px;">
               <!-- Pricing table 2 -->
-              <div class="relative flex flex-col h-full p-6 bg-gray-800" style="border-radius: 10px;box-shadow: rgb(31, 31, 31) 3px 3px 3px;">
-                <div class="absolute top-0 right-0 mr-6 -mt-4">
-                  <div
-                    class="inline-flex items-center text-sm font-semibold py-1 px-3 text-emerald-600 bg-emerald-200 rounded-full">
-                    <svg class="fill-emerald-500 mr-2" width="12" height="14" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M5.315.068a.5.5 0 0 0-.745.347A7.31 7.31 0 0 1 3.182 3.6a7.924 7.924 0 0 1-.8.83A6.081 6.081 0 0 0 0 9.035a5.642 5.642 0 0 0 2.865 4.9.5.5 0 0 0 .746-.4 2.267 2.267 0 0 1 .912-1.67 4.067 4.067 0 0 0 1.316-1.4 4.662 4.662 0 0 1 1.819 3.1.5.5 0 0 0 .742.371c1.767-.999 2.86-2.87 2.865-4.9-.001-3.589-2.058-6.688-5.95-8.968Z" />
-                    </svg>
-                    <span>HOT!</span>
-                  </div>
-                </div>
+              <div class="relative flex flex-col h-full p-6 " style="border-radius: 10px;box-shadow: rgb(29 29 29) 3px 3px 3px;background-color: #242424; ">
+                
                 <div class="mb-6">
                   <div class="text-lg font-semibold mb-1" style="    border-bottom: 1px solid #404d5e;padding-bottom: 5px;">STAKE</div>
                   <div class="text-gray-400 mb-6"></div>
 
                   <div  >
                     <div v-if="walletAccount == ''" @click="connectWallet"
-                      class="wallet_btn btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group">
-                      Connect wallet
+                      class="wallet_btn btn-sm text-black bg-gradient-to-t from-yellow-600 to-yellow-500 hover:to-yellow-400 w-full shadow-lg group">
+                      Connect Wallet
                     </div>
                     <div v-if="walletAccount != ''"
-                      class="wallet_btn btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 w-full shadow-lg group">
+                      class="wallet_btn btn-sm text-black bg-gradient-to-t from-yellow-600 to-yellow-500 hover:to-yellow-400 w-full shadow-lg group">
                       {{ walletAccount }}
                     </div>
                   </div>
@@ -572,14 +563,14 @@ onBeforeUnmount(() => { });
                   </div>
 
                   <div class="text-gray-400 mb-6"></div>
-                  <a class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group"
+                  <a class="wallet_btn btn-sm text-black bg-gradient-to-t from-yellow-600 to-yellow-500 hover:to-yellow-400 w-full shadow-lg group"
                     @click="toStake()">
                     Stake
                     <span
                       class="tracking-normal text-blue-200 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1"></span>
                   </a>
                   <div class="text-gray-400 mb-3"></div>
-                  <a class="btn-sm text-white bg-gradient-to-t  from-zinc-700 to-gray-600 hover:to-gray-700 w-full shadow-lg group"
+                  <a class="btn-sm text-white bg-gradient-to-t  from-neutral-900 to-neutral-900 hover:to-neutral-800 w-full shadow-lg group"
                     @click="toUnstake()">
                     Unstake
                     <span
@@ -588,7 +579,7 @@ onBeforeUnmount(() => { });
                 </div>
               </div>
 
-              <div class="relative flex flex-col h-full p-6 bg-gray-800" style="border-radius: 10px; box-shadow: 3px 3px 3px #1f1f1f;">
+              <div class="relative flex flex-col h-full p-6 " style="border-radius: 10px;  box-shadow: rgb(29 29 29) 3px 3px 3px;background-color: #242424; ">
                 <div class="absolute top-0 right-0 mr-6 -mt-4"></div>
                 <div class="mb-6">
                   <div class="text-lg font-semibold mb-1" style="    border-bottom: 1px solid #404d5e;
@@ -624,7 +615,7 @@ onBeforeUnmount(() => { });
                     </div>
                   </div>
 
-                  <a class="btn-sm text-white bg-gradient-to-t from-blue-600 to-blue-400 hover:to-blue-500 w-full shadow-lg group mt-4"
+                  <a class="wallet_btn btn-sm text-black bg-gradient-to-t from-yellow-600 to-yellow-500 hover:to-yellow-400 w-full shadow-lg group"
                     @click="harvest()">
                     Harvest
                     <span
