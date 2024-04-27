@@ -1,6 +1,6 @@
 <script setup>
 // chain
-import net_config from "@/utils/chain/testnet/sepolia_config";
+import net_config from "@/utils/chain/mainnet/eth_config";
 import msn_abi from "@/utils/chain/abi/msn.abi.json";
 import stake_abi from "@/utils/chain/abi/msn_stake.abi.json";
 import contract_call from "@/utils/chain/contract_call.js";
