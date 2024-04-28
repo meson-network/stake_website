@@ -537,7 +537,7 @@ onBeforeUnmount(() => { });
                       {{ walletAccount }}
                     </div>
                   </div>
-                  <div class="text-lg font-semibold  mt-6 mb-2">STAKE TOKEN</div>
+                  <div class="text-lg font-semibold  mt-6 mb-2">STAKED TOKEN</div>
                   <div class="flex justify-between">
                     <!--  -->
                     <div class="font-uncut-sans inline-flex items-baseline mb-4">
@@ -583,7 +583,7 @@ onBeforeUnmount(() => { });
                   <div class="text-lg font-semibold mb-1" style="    border-bottom: 1px solid  rgb(49 49 49);;
     padding-bottom: 5px;">HARVEST</div>
                   <div class="text-gray-400 mb-4"></div>
-                  <div class="text-lg font-semibold mb-2">UNHARVEST CREDIT</div>
+                  <div class="text-lg font-semibold mb-2">UNHARVESTED CREDIT</div>
                   <div class="font-uncut-sans inline-flex items-baseline mb-2">
                     <span class="text-3xl font-medium text-gray-400"></span>
                     <span class="text-4xl font-bold leading-7">{{ tokenAmountParser.parserToMoneyFormat(unharvestCredit,
@@ -591,7 +591,7 @@ onBeforeUnmount(() => { });
                     <!-- <span class="font-medium text-gray-400">.00</span> -->
                   </div>
                   <div class="text-gray-400 mb-6"></div>
-                  <div class="text-lg font-semibold mb-2">HARVEST CREDIT</div>
+                  <div class="text-lg font-semibold mb-2">HARVESTED CREDIT</div>
                   <div class="flex justify-between">
                     <!--  -->
                     <div class="font-uncut-sans inline-flex items-baseline mb-4">
@@ -654,7 +654,7 @@ onBeforeUnmount(() => { });
 
       <template v-slot:body>
         <div class="my-2">
-          <p>Stake token in contract</p>
+          <p>Staked token in contract</p>
           <input type="text" :value="tokenAmountParser.parserToMoneyFormat(stakeTokenAmount, 18, 8, 8)" disabled
             class="mt-1 disabled rounded" />
           <p class="mt-3">Amount to unstake</p>
