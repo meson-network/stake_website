@@ -1,5 +1,5 @@
 <script setup>
-window.location = "/stake";
+window.location = "/stake_mainnet";
 
 /////////////////////////////////////////////
 </script>
